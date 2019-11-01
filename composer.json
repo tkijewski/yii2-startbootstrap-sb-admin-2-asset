@@ -1,0 +1,22 @@
+{
+    "name": "hoaaah/yii2-startbootstrap-sb-admin-2-asset",
+    "description": "This extensions is library for Startbootstrap SB Admin 2 Template with Bootstrap4",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hoaaah",
+            "email": "heru@belajararief.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "bower-asset/startbootstrap-sb-admin-2": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "hoaaah\\sbadmin2\\": ""
+        }
+    }
+}
