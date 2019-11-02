@@ -203,6 +203,8 @@ class Menu extends Widget
     }
 
     protected function renderItem($item){
+        if($this->setVisibility($item) === false) return '';
+
         if(!isset($item['type'])) $item['type'] = 'menu';
 
         if($item['type'] === 'divider') return $this->dividerTemplate;
@@ -219,13 +221,15 @@ class Menu extends Widget
 
             // generate nav-item
             $liClass = $this->liClass;
-            if($this->isItemActive($item)) $liClass .= " {$this->activeClass}";
+            // if($this->isItemActive($item)) $liClass .= " {$this->activeClass}";
             
             return strtr($this->menuTemplate, ['{liClass}' => $liClass, '{link}' => $link]);
         }
     }
 
     protected function renderItems($items, $key){
+        if($this->setVisibility($items) === false) return '';
+
         // return $key."</br>";
         $label = $items['label'];
         $ulId = $this->ulId;
@@ -249,9 +253,15 @@ class Menu extends Widget
         $url = Url::to($item['url'], false);
         $icon = $item['icon'] ?? $this->iconDefault;
         $label = $item['label'];
-        if($this->isItemActive($item)) $subMenuClass .= " {$this->activeClass}";
+        // if($this->isItemActive($item)) $subMenuClass .= " {$this->activeClass}";
+
+        if(!$this->setVisibility($item)) return '';
 
         return strtr($this->subMenuLinkTemplate, ['{subMenuClass}' => $subMenuClass, '{url}' => $url, '{icon}' => $icon, '{label}' => $label]);
+    }
+
+    protected function setVisibility($item){
+        return $item['visible'] ?? true;
     }
 
 }
