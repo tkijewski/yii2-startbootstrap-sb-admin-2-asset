@@ -10,8 +10,10 @@ use yii\helpers\Html;
 /**
  * Class Menu
  * Theme menu widget.
- * todo next visibility, linkOptions, headerSubMenu
+ * todo next docs in this class
  */
+
+ /* (C) Created by Heru Arief Wijaya (http://belajararief.com/) untuk Indonesia.*/
 
 class Menu extends Widget
 {
@@ -63,11 +65,11 @@ class Menu extends Widget
     public $iconDefault = "fas fa-circle";
     public $subMenuTemplate = '
         <li class="{liClass}">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse{key}" aria-expanded="true" aria-controls="collapse{key}">
+            <a class="nav-link {collapsed-arrow}" href="#" data-toggle="collapse" data-target="#collapse{key}" aria-expanded="true" aria-controls="collapse{key}">
                 <i class="{icon}"></i>
                 <span>{label}</span>
             </a>
-            <div id="collapse{key}" class="collapse" aria-labelledby="headingTwo" data-parent="#{ulId}">
+            <div id="collapse{key}" class="collapse {active-show}" aria-labelledby="headingTwo" data-parent="#{ulId}">
                 <div class="bg-white py-2 collapse-inner rounded">
                     {header}
                     {link}
@@ -96,34 +98,6 @@ class Menu extends Widget
      */
     public function run()
     {
-        if ($this->route === null && Yii::$app->controller !== null) {
-            $this->route = Yii::$app->controller->getRoute();
-        }
-        // if ($this->params === null) {
-        //     $this->params = Yii::$app->request->getQueryParams();
-        // }
-        $posDefaultAction = strpos($this->route, Yii::$app->controller->action->id);
-        if ($posDefaultAction) {
-            $this->noDefaultAction = rtrim(substr($this->route, 0, $posDefaultAction), '/');
-        } else {
-            $this->noDefaultAction = false;
-        }
-        $posDefaultRoute = strpos($this->route, Yii::$app->controller->module->defaultRoute);
-        if ($posDefaultRoute) {
-            $this->noDefaultRoute = rtrim(substr($this->route, 0, $posDefaultRoute), '/');
-        } else {
-            $this->noDefaultRoute = false;
-        }
-        // $items = $this->normalizeItems($this->items, $hasActiveChild);
-        // if (!empty($items)) {
-        //     $options = $this->options;
-        //     $tag = ArrayHelper::remove($options, 'tag', 'ul');
-
-        //     echo Html::tag($tag, $this->renderItems($items), $options);
-        // }
-
-
-        // ---------bagian heru
         $return = $this->beginWidget();
 
         if(!$this->items) throw new Exception("This extensions need items param. Please provide it", 1);
@@ -143,40 +117,6 @@ class Menu extends Widget
         return $return;
     }
     
-    /**
-     * Checks whether a menu item is active.
-     * This is done by checking if [[route]] and [[params]] match that specified in the `url` option of the menu item.
-     * When the `url` option of a menu item is specified in terms of an array, its first element is treated
-     * as the route for the item and the rest of the elements are the associated parameters.
-     * Only when its route and parameters match [[route]] and [[params]], respectively, will a menu item
-     * be considered active.
-     * @param array $item the menu item to be checked
-     * @return boolean whether the menu item is active
-     * I take this function from Menu Widget from https://github.com/dmstr/yii2-adminlte-asset
-     */
-    protected function isItemActive($item)
-    {
-        if (isset($item['url']) && is_array($item['url']) && isset($item['url'][0])) {
-            $route = $item['url'][0];
-            if ($route[0] !== '/' && Yii::$app->controller) {
-                $route = ltrim(Yii::$app->controller->module->getUniqueId() . '/' . $route, '/');
-            }
-            $route = ltrim($route, '/');
-            if ($route != $this->route && $route !== $this->noDefaultRoute && $route !== $this->noDefaultAction) {
-                return false;
-            }
-            unset($item['url']['#']);
-            if (count($item['url']) > 1) {
-                foreach (array_splice($item['url'], 1) as $name => $value) {
-                    if ($value !== null && (!isset($this->params[$name]) || $this->params[$name] != $value)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        return false;
-    }
 
     protected function beginWidget(){
         $return = "<ul class=\"{$this->ulClass}\" id=\"{$this->ulId}\">";
@@ -221,7 +161,7 @@ class Menu extends Widget
 
             // generate nav-item
             $liClass = $this->liClass;
-            // if($this->isItemActive($item)) $liClass .= " {$this->activeClass}";
+            if($this->isActive($item['url'])) $liClass .= " {$this->activeClass}";
             
             return strtr($this->menuTemplate, ['{liClass}' => $liClass, '{link}' => $link]);
         }
@@ -238,13 +178,26 @@ class Menu extends Widget
         if(isset($items['subMenuTitle'])) $header = strtr($this->subMenuHeaderTemplate, '{subMenuTitle}', $subMenuTitle);
         $icon = $items['icon'] ?? $this->iconDefault;
 
+        $subMenuClass = $this->liClass;
+        $active = false;
         $link = '';
+        $collapseShow = '';
+        $collapseArrow = "collapsed";
 
         foreach ($items['items'] as $item) {
+            $isActiveThisItem = $this->isActive($item['url']);
+            if($isActiveThisItem) $active = true;
             $link .= $this->renderSubItem($item);
         }
 
-        return strtr($this->subMenuTemplate, ['{liClass}' => $this->liClass, '{key}' => $key, '{label}' => $label, 
+        if($active === true)
+        {
+            $subMenuClass .= " {$this->activeClass}";
+            $collapseShow = "show";
+            $collapseArrow = '';
+        }
+
+        return strtr($this->subMenuTemplate, ['{liClass}' => $subMenuClass, '{key}' => $key, '{label}' => $label, '{active-show}' => $collapseShow, '{collapsed-arrow}' => $collapseArrow,
             '{ulId}' => $ulId, '{header}' => $header, '{link}' => $link, '{icon}' => $icon]);
     }
 
@@ -253,7 +206,7 @@ class Menu extends Widget
         $url = Url::to($item['url'], false);
         $icon = $item['icon'] ?? $this->iconDefault;
         $label = $item['label'];
-        // if($this->isItemActive($item)) $subMenuClass .= " {$this->activeClass}";
+        if($this->isActive($item['url'])) $subMenuClass .= " {$this->activeClass}";
 
         if(!$this->setVisibility($item)) return '';
 
@@ -264,4 +217,53 @@ class Menu extends Widget
         return $item['visible'] ?? true;
     }
 
+    /**
+     * check if any menu item is active
+     * @return bool
+     * @param array $url, will get $item['url'] from any item
+     * @param int $countOfUrlPath use to count how much "/" in given $url
+     * this function will check wheter current url have any module
+     * when module is exist, we will compare module, controller, and action
+     * when module is not exist we will compare controller and action
+     */
+    function isActive($url)
+    {
+        $countOfUrlPath = substr_count($url[0], '/');
+        $urlExploded = explode('/', $url[0]);
+        $isModule = Yii::$app->controller->module->id !== Yii::$app->id;
+        if($isModule){
+            switch ($countOfUrlPath) {
+                case 2:
+                    $urlModule = $urlExploded[1];
+                    $urlController = $urlExploded[2];
+                    if(Yii::$app->controller->module->id == $urlModule && Yii::$app->controller->id == $urlController) return true;
+                    break;
+                case 3:
+                    $urlModule = $urlExploded[1];
+                    $urlController = $urlExploded[2];
+                    $urlAction = $urlExploded[3];
+                    if(Yii::$app->controller->module->id == $urlModule && Yii::$app->controller->id == $urlController && Yii::$app->controller->action->id == $urlAction) return true;
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }else{
+            switch ($countOfUrlPath) {
+                case 1:
+                    $urlController = $urlExploded[1];
+                    if(Yii::$app->controller->id == $urlController) return true;
+                    break;
+                case 2:
+                    $urlController = $urlExploded[1];
+                    $urlAction = $urlExploded[2];
+                    if(Yii::$app->controller->id == $urlController && Yii::$app->controller->action->id == $urlAction) return true;
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+        return false;
+    }
 }
