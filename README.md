@@ -53,5 +53,93 @@ You can see views-examples folder for example use of this library
 Menu Widget
 -----
 
-Under Developments
+You can use Menu widget in your sidebar. This widget optimize for Startbootstrap SB-Admin 2 template.
+This widget, like SB-Admin 2, only support 2 level menu. 
 
+You can see example use of this widget in [views-exampale/views/layout/sidebar.php](https://github.com/hoaaah/yii2-startbootstrap-sb-admin-2-asset/blob/master/views-examples/views/layouts/sidebar.php). 
+```php
+echo Menu::widget([
+    'options' => [
+        'ulClass' => "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion",
+        'ulId' => "accordionSidebar"
+    ], //  optional
+    'brand' => [
+        'url' => ['/'],
+        'content' => <<<HTML
+            <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>        
+HTML
+    ],
+    'items' => [
+        [
+            'label' => 'Menu 1',
+            'url' => ['/menu1'], //  Array format of Url to, will be not used if have an items
+            'icon' => 'fas fa-fw fa-tachometer-alt', // optional, default to "fa fa-circle-o
+            'visible' => true, // optional, default to true
+            // 'options' => [
+            //     'liClass' => 'nav-item',
+            // ] // optional
+        ],
+        [
+            'type' => 'divider', // divider or sidebar, if not set then link menu
+            // 'label' => '', // if sidebar we will set this, if divider then no
+        ],
+        [
+            'label' => 'Menu 2',
+            // 'icon' => 'fa fa-menu', // optional, default to "fa fa-circle-o
+            'visible' => true, // optional, default to true
+            // 'subMenuTitle' => 'Menu 2 Item', // optional only when have submenutitle, if not exist will not have subMenuTitle
+            'items' => [
+                [
+                    'label' => 'Menu 2 Sub 1',
+                    'url' => ['/menu21'], //  Array format of Url to, will be not used if have an items
+                ],
+                [
+                    'label' => 'Menu 2 Sub 2',
+                    'url' => ['/menu22'], //  Array format of Url to, will be not used if have an items
+                ],
+            ]
+        ],
+        
+        [
+            'label' => 'Menu 3',
+            'visible' => true, // optional, default to true
+            // 'subMenuTitle' => 'Menu 3 Item', // optional only when have submenutitle, if not exist will not have subMenuTitle
+            'items' => [
+                [
+                    'label' => 'Menu 3 Sub 1',
+                    'url' => ['/menu21'], //  Array format of Url to, will be not used if have an items
+                ],
+                [
+                    'label' => 'Menu 3 Sub 2',
+                    'url' => ['/menu22'], //  Array format of Url to, will be not used if have an items
+                ],
+            ]
+        ],
+    ]
+]);
+```
+As you can see in above example, this Widget consist of two primary method.
+
+Method | Explanation
+-------|------------
+`options` | **Optional** method. in this metod you will set any costumization of this Menu widget. It consist of `ulClass` method and `ulId` method
+-- `ulClass` | Set your `<ul>` class of this menu. default to "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+-- `ulId` | Set your `<ul>` id of this menu. default to "accordionSidebar"
+`items` | **Required** method. You must set this method in your widget. You can set `items` inside this method and it will create sub-menu items. Items and Sub Menu Item method use the same method, except for `type` method.
+-- `type` | **Optional** parameter, there are 3 category in this params. They are **menu, divider, and sidebar**. Default value of this params are **menu**
+-- `label` | **Required** parameter. This param will give label to your menu
+-- `icon` | **Optional** parameter. Will use font-awesome icon, so the value of this param will use fa class. Default to `fas fa-circle`
+-- `url` | **Required** parameter. Use Array value, like array on `\yii\helpers\Url::to($array)`. If there are `items` parameter set, `url` will be ignored
+-- `visible` | **Optional** paremeter. Determined the visibility of menu. Value of `visible` are boolean. Default to `true`
+
+
+
+## Creator
+
+This asset wrapper was created by and is maintained by **[hoaaah](http://belajararief.com/)**.
+
+* https://twitter.com/hoaaah
+* https://github.com/hoaaah
