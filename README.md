@@ -58,6 +58,7 @@ This widget, like SB-Admin 2, only support 2 level menu.
 
 You can see example use of this widget in [views-exampale/views/layout/sidebar.php](https://github.com/hoaaah/yii2-startbootstrap-sb-admin-2-asset/blob/master/views-examples/views/layouts/sidebar.php). 
 ```php
+use hoaaah\sbadmin2\widgets\Menu;
 echo Menu::widget([
     'options' => [
         'ulClass' => "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion",
@@ -134,6 +135,38 @@ Method | Explanation
 -- `icon` | **Optional** parameter. Will use font-awesome icon, so the value of this param will use fa class. Default to `fas fa-circle`
 -- `url` | **Required** parameter. Use Array value, like array on `\yii\helpers\Url::to($array)`. If there are `items` parameter set, `url` will be ignored
 -- `visible` | **Optional** paremeter. Determined the visibility of menu. Value of `visible` are boolean. Default to `true`
+
+Card Widget
+-----
+
+You can use card widget. This widget will create bootstrap card, optimize for this template
+
+Example use of card are like below code
+```php
+use hoaaah\sbadmin2\widgets\Card;
+echo Card::widget([
+    'type' => 'cardBorder',
+    'label' => 'Label',
+    'sLabel' => '1000',
+    'icon' => 'fas fa-calendar',
+    'options' => [
+        'colSizeClass' => 'col-md-3',
+        'borderColor' => 'primary',
+    ]
+]);
+```
+As you can see in above example, this Widget consist of some method.
+
+Method | Explanation
+-------|------------
+`type` | **Optional** method. In this method you set type of your card. This widget support this type of card: `cardBorder`, ..... Default value of type is `cardBorder`
+`label` | **Required** method. In this method you set primary label of your card
+`sLabel` | **Required** method. In this method you set secondary label of your card
+`icon` | **Required** method. In this method you set icon of your card
+`options` | **options** method. Set options, available options are `colSizeClass`, `borderColor`
+-- `colSizeClass` | Set your col-size, value of this method are bootstrap col-size
+-- `borderColor` | Set your borderColor, value of this method are bootstrap color
+
 
 
 
