@@ -26,6 +26,14 @@ Card::widget([
         'borderColor' => 'primary',
     ]
 ]);
+Card::widget([
+    'type' => 'cardBox',
+    'header' => 'Label',
+    'body' => '1000',
+    'options' => [
+        'color' => 'primary',
+    ]
+]);
 */
 class Card extends Widget
 {
@@ -42,6 +50,7 @@ class Card extends Widget
     public $labelOptions;
     public $colSizeClassDefault = 'col-xl-3 col-md-6 mb-4';
     public $borderColorDefault = 'primary';
+    public $colorDefault = "primary";
 
     public $cardBorderTemplate = '
         <div class="{colSizeClass}">
@@ -61,16 +70,33 @@ class Card extends Widget
         </div>    
     ';
 
+    public $cardBoxTemplate = '
+        <div class="card {cardClass}">
+            <div class="{headerClass}">
+                {cardHeader}
+            </div>
+            <div class="card-body">
+                {cardBody}
+            </div>
+        </div>    
+    ';
+
+    public $defaultCardClass = "border-{cardColor} my-4";
+    public $defaultHeaderClass = "card-header text-white bg-{cardColor} py-3";
+
+
     public function init() {
         parent::init();
         if(!$this->type) $this->type = 'cardBorder';
         if(!$this->options){
             $this->options['colSizeClass'] = $this->colSizeClassDefault;
             $this->options['borderColor'] = $this->borderColorDefault;
+            $this->options['color'] = $this->colorDefault;
         }
         if(isset($this->options)){
             if(!isset($this->options['colSizeClass'])) $this->options['colSizeClass'] = $this->colSizeClassDefault;
             if(!isset($this->options['borderColor'])) $this->options['borderColor'] = $this->borderColorDefault;
+            if(!isset($this->options['color'])) $this->options['color'] = $this->colorDefault;
         }
     }
 
@@ -79,7 +105,8 @@ class Card extends Widget
      */
     public function run()
     {
-        return $this->renderCardBorder();
+        if($this->type == 'cardBorder') return $this->renderCardBorder();
+        if($this->type == 'cardBox') return $this->renderCardBox();
     }
 
     public function renderCardBorder()
@@ -94,6 +121,30 @@ class Card extends Widget
             '{bigLabel}' => $this->label,
             '{smallLabel}' => $this->sLabel,
             '{faIcon}' => $this->icon
+        ]);
+    }
+
+    public function renderCardBox()
+    {
+        $header = $this->header;
+        $body = $this->body;
+        $color = $this->colorDefault;
+        $cardClass = $this->defaultCardClass;
+        $headerClass = $this->defaultHeaderClass;
+
+        if($this->options){
+            if($this->options['color']) $color = $this->options['color'];
+            if($this->options['cardClass']) $cardClass = $this->options['cardClass'];
+            if($this->options['headerClass']) $headerClass = $this->options['headerClass'];
+        }
+        $cardClass = strtr($cardClass, ['{cardColor}' => $color]);
+        $headerClass = strtr($headerClass, ['{cardColor}' => $color]);
+
+        return strtr($this->cardBoxTemplate, [
+            '{cardClass}' => $cardClass,
+            '{headerClass}' => $headerClass,
+            '{cardHeader}' => $header,
+            '{cardBody}' => $body,
         ]);
     }
 }
