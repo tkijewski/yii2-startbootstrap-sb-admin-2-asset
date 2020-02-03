@@ -1,6 +1,6 @@
 yii2-startbootstrap-sb-admin-2-asset
 =====================================
-This packages contans an Asset Bundle of [Startbootstrap SB Admin 2](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2) for Yii2. 
+This packages contans an Asset Bundle of [Startbootstrap SB Admin 2](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2) for Yii2.
 
 [Startbootstrap SB Admin 2](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2) is a responsive [Bootstrap 4](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
 
@@ -54,9 +54,9 @@ Menu Widget
 -----
 
 You can use Menu widget in your sidebar. This widget optimize for Startbootstrap SB-Admin 2 template.
-This widget, like SB-Admin 2, only support 2 level menu. 
+This widget, like SB-Admin 2, only support 2 level menu.
 
-You can see example use of this widget in [views-exampale/views/layout/sidebar.php](https://github.com/hoaaah/yii2-startbootstrap-sb-admin-2-asset/blob/master/views-examples/views/layouts/sidebar.php). 
+You can see example use of this widget in [views-exampale/views/layout/sidebar.php](https://github.com/hoaaah/yii2-startbootstrap-sb-admin-2-asset/blob/master/views-examples/views/layouts/sidebar.php).
 ```php
 use hoaaah\sbadmin2\widgets\Menu;
 echo Menu::widget([
@@ -103,7 +103,7 @@ HTML
                 ],
             ]
         ],
-        
+
         [
             'label' => 'Menu 3',
             'visible' => true, // optional, default to true
@@ -116,6 +116,9 @@ HTML
                 [
                     'label' => 'Menu 3 Sub 2',
                     'url' => ['/menu22'], //  Array format of Url to, will be not used if have an items
+                    'linkOptions' => [
+                       'onClick' => 'alert("This is onClick")',
+                    ]
                 ],
             ]
         ],
@@ -135,6 +138,7 @@ Method | Explanation
 -- `icon` | **Optional** parameter. Will use font-awesome icon, so the value of this param will use fa class. Default to `fas fa-circle`
 -- `url` | **Required** parameter. Use Array value, like array on `\yii\helpers\Url::to($array)`. If there are `items` parameter set, `url` will be ignored
 -- `visible` | **Optional** paremeter. Determined the visibility of menu. Value of `visible` are boolean. Default to `true`
+-- `linkOptions` | **Optional** paremeter. This param use array, give any options param to `a` tag, such as `onClick` or other options in link.
 
 Card Widget
 -----
