@@ -43,6 +43,8 @@ class Card extends Widget
      * it end with akses
      */
     public $type;
+    public $header;
+    public $body;
     public $label;
     public $sLabel;
     public $icon;
@@ -92,11 +94,15 @@ class Card extends Widget
             $this->options['colSizeClass'] = $this->colSizeClassDefault;
             $this->options['borderColor'] = $this->borderColorDefault;
             $this->options['color'] = $this->colorDefault;
+            $this->options['cardClass'] = $this->defaultCardClass;
+            $this->options['headerClass'] = $this->defaultHeaderClass;
         }
         if(isset($this->options)){
             if(!isset($this->options['colSizeClass'])) $this->options['colSizeClass'] = $this->colSizeClassDefault;
             if(!isset($this->options['borderColor'])) $this->options['borderColor'] = $this->borderColorDefault;
             if(!isset($this->options['color'])) $this->options['color'] = $this->colorDefault;
+            if(!isset($this->options['cardClass'])) $this->options['cardClass'] = $this->defaultCardClass;
+            if(!isset($this->options['headerClass'])) $this->options['headerClass'] = $this->defaultHeaderClass;
         }
     }
 
