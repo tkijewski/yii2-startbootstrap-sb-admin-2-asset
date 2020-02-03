@@ -6,6 +6,7 @@ use yii\bootstrap4\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use Exception;
 
 /**
  * Class Menu
@@ -17,7 +18,7 @@ use yii\helpers\Html;
 
 class Menu extends Widget
 {
-    
+
     public $activateParents = true;
     public $defaultIconHtml = '<i class="fa fa-circle-o"></i> ';
     // public $options = ['class' => 'sidebar-menu', 'data-widget' => 'tree'];
@@ -31,7 +32,7 @@ class Menu extends Widget
     private $noDefaultAction;
     private $noDefaultRoute;
 
-    
+
     /**
      * @inheritdoc
      * Styles all labels of items on sidebar by AdminLTE
@@ -39,14 +40,14 @@ class Menu extends Widget
     public $options;
     public $items;
     public $brand;
-    
+
     public $ulClass = "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion";
     public $ulId = "accordionSidebar";
     public $liClass = "nav-item";
     public $brandTemplate = '
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{url}">
             <div class="sidebar-brand-text mx-3">{appName}</div>
-        </a>    
+        </a>
     ';
     public $defaultBrand = '
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{url}">
@@ -54,14 +55,14 @@ class Menu extends Widget
         <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3">{appName}</div>
-    </a>        
+    </a>
     ';
     public $activeClass = "active";
     public $labelTemplate = '<span>{label}</span>';
     public $dividerTemplate = '<hr class="sidebar-divider">';
     public $sidebarHeadingTemplate = '<div class="sidebar-heading">{label}</div>';
     public $menuTemplate = '<li class="{liClass}">{link}</li>';
-    public $linkTemplate = '<a class="nav-link" href="{url}"><i class="{icon}"></i> <span>{label}</span></a>'; // not sure label use span or not
+    public $linkTemplate = '<a class="nav-link" href="{url}" {linkOptions}><i class="{icon}"></i> <span>{label}</span></a>'; // not sure label use span or not
     public $iconDefault = "fas fa-circle";
     public $subMenuTemplate = '
         <li class="{liClass}">
@@ -78,14 +79,14 @@ class Menu extends Widget
         </li>
     ';
     public $subMenuHeaderTemplate = '<h6 class="collapse-header">{subMenuTitle}</h6>';
-    public $subMenuLinkTemplate = '<a class="{subMenuClass}" href="{url}"><i class="{icon}"></i> {label}</a>';
+    public $subMenuLinkTemplate = '<a class="{subMenuClass}" href="{url} {linkOptions}"><i class="{icon}"></i> {label}</a>';
     public $subMenuLinkClass = 'collapse-item';
     public $route;
 
-    
+
     public function init() {
         parent::init();
-        
+
         // change default value from options
         if($this->options['ulClass']) $this->ulClass = $this->options['ulClass'];
         if($this->options['ulId']) $this->ulId = $this->options['ulId'];
@@ -103,7 +104,7 @@ class Menu extends Widget
         if(!$this->items) throw new Exception("This extensions need items param. Please provide it", 1);
 
         $return .= $this->renderBrand();
-        
+
         foreach ($this->items as $key => $value) {
             if(!isset($value['items'])){
                 $return .= $this->renderItem($value);
@@ -116,7 +117,7 @@ class Menu extends Widget
 
         return $return;
     }
-    
+
 
     protected function beginWidget(){
         $return = "<ul class=\"{$this->ulClass}\" id=\"{$this->ulId}\">";
@@ -157,12 +158,19 @@ class Menu extends Widget
             $url = Url::to($item['url'], true);
             $label = $item['label'];
             $icon = $item['icon'] ?? $this->iconDefault;
-            $link = strtr($this->linkTemplate, ['{url}' => $url, '{label}' => $label, '{icon}' => $icon]);
+            $linkOptions = '';
+            if(isset($item['linkOptions']))
+            {
+                foreach ($item['linkOptions'] as $key => $value) {
+                    $linkOptions .= "{$key}=\"{$value}\"";
+                }
+            }
+            $link = strtr($this->linkTemplate, ['{url}' => $url, '{label}' => $label, '{icon}' => $icon, '{linkOptions}' => $linkOptions]);
 
             // generate nav-item
             $liClass = $this->liClass;
             if($this->isActive($item['url'])) $liClass .= " {$this->activeClass}";
-            
+
             return strtr($this->menuTemplate, ['{liClass}' => $liClass, '{link}' => $link]);
         }
     }
@@ -206,11 +214,18 @@ class Menu extends Widget
         $url = Url::to($item['url'], false);
         $icon = $item['icon'] ?? $this->iconDefault;
         $label = $item['label'];
+        $linkOptions = '';
+        if(isset($item['linkOptions']))
+        {
+            foreach ($item['linkOptions'] as $key => $value) {
+                $linkOptions .= "{$key}=\"{$value}\"";
+            }
+        }
         if($this->isActive($item['url'])) $subMenuClass .= " {$this->activeClass}";
 
         if(!$this->setVisibility($item)) return '';
 
-        return strtr($this->subMenuLinkTemplate, ['{subMenuClass}' => $subMenuClass, '{url}' => $url, '{icon}' => $icon, '{label}' => $label]);
+        return strtr($this->subMenuLinkTemplate, ['{subMenuClass}' => $subMenuClass, '{url}' => $url, '{icon}' => $icon, '{label}' => $label, '{linkOptions}' => $linkOptions]);
     }
 
     protected function setVisibility($item){
