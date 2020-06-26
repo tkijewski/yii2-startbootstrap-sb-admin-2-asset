@@ -12,29 +12,29 @@ use yii\helpers\StringHelper;
  * @param html body
  * play it like this
  * use app\widgets\BoxWidget;
- * echo BoxWidget::widget(['title' => 'Judul', 'body' => $yourHtmlBodyContent])
  * to fill $yourHtmlBodyContent you can use ob_get_content method like below example
+ * 
+ * ```php
+ *  Card::widget([
+ *      'type' => 'cardBorder',
+ *      'label' => 'Label',
+ *      'sLabel' => '1000',
+ *      'icon' => 'fa-calendar',
+ *      'options' => [
+ *          'colSizeClass' => 'col-md-3',
+ *          'borderColor' => 'primary',
+ *      ]
+ *  ]);
+ *  Card::widget([
+ *      'type' => 'cardBox',
+ *      'header' => 'Label',
+ *      'body' => '1000',
+ *      'options' => [
+ *          'color' => 'primary',
+ *      ]
+ *  ]);
+ * ```
  */
-/*
-Card::widget([
-    'type' => 'cardBorder',
-    'label' => 'Label',
-    'sLabel' => '1000',
-    'icon' => 'fa-calendar',
-    'options' => [
-        'colSizeClass' => 'col-md-3',
-        'borderColor' => 'primary',
-    ]
-]);
-Card::widget([
-    'type' => 'cardBox',
-    'header' => 'Label',
-    'body' => '1000',
-    'options' => [
-        'color' => 'primary',
-    ]
-]);
-*/
 class Card extends Widget
 {
     /**
