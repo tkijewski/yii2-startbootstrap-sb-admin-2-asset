@@ -60,7 +60,7 @@ class Menu extends Widget
     public $activeClass = "active";
     public $labelTemplate = '<span>{label}</span>';
     public $dividerTemplate = '<hr class="sidebar-divider">';
-    public $sidebarHeadingTemplate = '<div class="sidebar-heading">{label}</div>';
+    public $sidebarHeadingTemplate = '<div class="sidebar-heading"><h6>{label}</h6></div>';
     public $menuTemplate = '<li class="{liClass}">{link}</li>';
     public $linkTemplate = '<a class="nav-link" href="{url}" {linkOptions}><i class="{icon}"></i> <span>{label}</span></a>'; // not sure label use span or not
     public $iconDefault = "fas fa-circle";
@@ -150,7 +150,7 @@ class Menu extends Widget
 
         if($item['type'] === 'divider') return $this->dividerTemplate;
 
-        if($item['type'] === 'sidebar') return strtr($this->sidebarHeadingTemplate, '{label}', $item['label']);
+        if($item['type'] === 'sidebar') return strtr($this->sidebarHeadingTemplate, ['{label}' => $item['label']]);
 
         if($item['type'] === 'menu')
         {
@@ -183,7 +183,7 @@ class Menu extends Widget
         $ulId = $this->ulId;
         $subMenuTitle = $items['subMenuTitle'] ?? '';
         $header = $subMenuTitle;
-        if(isset($items['subMenuTitle'])) $header = strtr($this->subMenuHeaderTemplate, '{subMenuTitle}', $subMenuTitle);
+        if(isset($items['subMenuTitle'])) $header = strtr($this->subMenuHeaderTemplate, ['{subMenuTitle}' => $subMenuTitle]);
         $icon = $items['icon'] ?? $this->iconDefault;
 
         $subMenuClass = $this->liClass;
