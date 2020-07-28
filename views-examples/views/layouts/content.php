@@ -37,7 +37,7 @@ use yii\bootstrap4\Alert;
     <!-- Content Row -->
     <div class="row">
         <div class="col-md-12">
-            <?= Alert::widget() ?>
+            <?= Yii::$app->getSession()->getAllFlashes() ? Alert::widget() : '' ?>
         </div>
     </div>
     <div class="row">
