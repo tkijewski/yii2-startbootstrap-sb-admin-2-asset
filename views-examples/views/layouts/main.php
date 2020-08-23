@@ -3,8 +3,8 @@ use yii\helpers\Html;
 
 /* (C) Copyright 2019 Heru Arief Wijaya (http://belajararief.com/) untuk Indonesia.*/
 
-app\assets\AppAsset::register($this);
-app\assets\SbAdmin2Asset::register($this);
+\app\assets\AppAsset::register($this);
+\hoaaah\sbadmin2\assets\SbAdmin2Asset::register($this);
 
 $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@bower/startbootstrap-sb-admin-2');
 ?>
