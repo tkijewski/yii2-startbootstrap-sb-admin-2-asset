@@ -37,7 +37,16 @@ use yii\bootstrap4\Alert;
     <!-- Content Row -->
     <div class="row">
         <div class="col-md-12">
-            <?= Yii::$app->getSession()->getAllFlashes() ? Alert::widget() : '' ?>
+            <?php if (Yii::$app->getSession()->getAllFlashes()) {
+                foreach (Yii::$app->getSession()->getAllFlashes() as $key => $value) {
+                    echo Alert::widget([
+                        'options' => [
+                            'class' => 'alert-' . $key,
+                        ],
+                        'body' => $value,
+                    ]);
+                }
+            } ?>
         </div>
     </div>
     <div class="row">
