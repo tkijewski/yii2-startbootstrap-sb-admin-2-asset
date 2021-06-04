@@ -1,4 +1,5 @@
 <?php
+
 namespace hoaaah\sbadmin2\widgets;
 
 use yii\base\Widget;
@@ -13,7 +14,7 @@ use yii\helpers\StringHelper;
  * play it like this
  * use app\widgets\BoxWidget;
  * to fill $yourHtmlBodyContent you can use ob_get_content method like below example
- * 
+ *
  * ```php
  *  Card::widget([
  *      'type' => 'cardBorder',
@@ -87,22 +88,23 @@ class Card extends Widget
     public $defaultHeaderClass = "card-header text-white bg-{cardColor} py-3";
 
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        if(!$this->type) $this->type = 'cardBorder';
-        if(!$this->options){
+        if (!$this->type) $this->type = 'cardBorder';
+        if (!$this->options) {
             $this->options['colSizeClass'] = $this->colSizeClassDefault;
             $this->options['borderColor'] = $this->borderColorDefault;
             $this->options['color'] = $this->colorDefault;
             $this->options['cardClass'] = $this->defaultCardClass;
             $this->options['headerClass'] = $this->defaultHeaderClass;
         }
-        if(isset($this->options)){
-            if(!isset($this->options['colSizeClass'])) $this->options['colSizeClass'] = $this->colSizeClassDefault;
-            if(!isset($this->options['borderColor'])) $this->options['borderColor'] = $this->borderColorDefault;
-            if(!isset($this->options['color'])) $this->options['color'] = $this->colorDefault;
-            if(!isset($this->options['cardClass'])) $this->options['cardClass'] = $this->defaultCardClass;
-            if(!isset($this->options['headerClass'])) $this->options['headerClass'] = $this->defaultHeaderClass;
+        if (isset($this->options)) {
+            if (!isset($this->options['colSizeClass'])) $this->options['colSizeClass'] = $this->colSizeClassDefault;
+            if (!isset($this->options['borderColor'])) $this->options['borderColor'] = $this->borderColorDefault;
+            if (!isset($this->options['color'])) $this->options['color'] = $this->colorDefault;
+            if (!isset($this->options['cardClass'])) $this->options['cardClass'] = $this->defaultCardClass;
+            if (!isset($this->options['headerClass'])) $this->options['headerClass'] = $this->defaultHeaderClass;
         }
     }
 
@@ -111,13 +113,13 @@ class Card extends Widget
      */
     public function run()
     {
-        if($this->type == 'cardBorder') return $this->renderCardBorder();
-        if($this->type == 'cardBox') return $this->renderCardBox();
+        if ($this->type == 'cardBorder') return $this->renderCardBorder();
+        if ($this->type == 'cardBox') return $this->renderCardBox();
     }
 
     public function renderCardBorder()
     {
-        if($this->labelOptions['truncateWords']){
+        if (isset($this->labelOptions['truncateWords'])) {
             $this->label = StringHelper::truncateWords($this->label, $this->labelOptions['numberOfWords'], '...', true);
             $this->sLabel = StringHelper::truncateWords($this->sLabel, $this->labelOptions['numberOfWords'], '...', true);
         }
@@ -138,10 +140,10 @@ class Card extends Widget
         $cardClass = $this->defaultCardClass;
         $headerClass = $this->defaultHeaderClass;
 
-        if($this->options){
-            if($this->options['color']) $color = $this->options['color'];
-            if($this->options['cardClass']) $cardClass = $this->options['cardClass'];
-            if($this->options['headerClass']) $headerClass = $this->options['headerClass'];
+        if ($this->options) {
+            if (isset($this->options['color'])) $color = $this->options['color'];
+            if (isset($this->options['cardClass'])) $cardClass = $this->options['cardClass'];
+            if (isset($this->options['headerClass'])) $headerClass = $this->options['headerClass'];
         }
         $cardClass = strtr($cardClass, ['{cardColor}' => $color]);
         $headerClass = strtr($headerClass, ['{cardColor}' => $color]);
