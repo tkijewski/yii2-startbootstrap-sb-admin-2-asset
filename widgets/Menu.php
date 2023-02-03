@@ -243,7 +243,10 @@ class Menu extends Widget
      */
     function isActive($url)
     {
-        $countOfUrlPath = substr_count($url[0], '/');
+       if (Url::to($url) == Yii::$app->request->url) {
+            return true;
+        }
+        /*$countOfUrlPath = substr_count($url[0], '/');
         $urlExploded = explode('/', $url[0]);
         $isModule = Yii::$app->controller->module->id !== Yii::$app->id;
         if($isModule){
@@ -279,6 +282,6 @@ class Menu extends Widget
                     break;
             }
         }
-        return false;
+        return false;*/
     }
 }
